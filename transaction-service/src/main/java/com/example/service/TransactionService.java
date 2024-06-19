@@ -13,6 +13,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
@@ -91,5 +92,21 @@ public class TransactionService {
                 .collect(Collectors.toList());
 
         return response;
+    }
+
+    public void addMoney(String username , int amount) throws JsonProcessingException {
+
+        Txn txn = Txn.builder()
+                .externalTxnId(UUID.randomUUID().toString())
+                .sender("razor-pay")
+                .receiver(username)
+                .purpose("Add Money to wallet")
+                .amount((double) amount)
+                .txnStatus(TxnStatus.PENDING)
+                .build();
+
+        transactionRepository.save(txn);
+
+        kafkaTemplate.send(Constants.ADD_MONEY, objectMapper.writeValueAsString(txn));
     }
 }

@@ -1,7 +1,6 @@
 package com.example.config;
 
-import com.example.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.service.AuthService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -20,12 +19,9 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    @Autowired
-    PasswordEncoder passwordEncoder;
-
     @Bean
     public UserDetailsService userDetailsService() {
-        return new UserService();
+        return new AuthService();
     }
 
     @Bean
@@ -34,8 +30,6 @@ public class SecurityConfig {
                 .and()
                 .csrf().disable()
                 .authorizeRequests((authorizeRequests) -> authorizeRequests
-                        .requestMatchers("/user/create/**").permitAll()
-                        .requestMatchers("/auth/login").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(AbstractAuthenticationFilterConfigurer::permitAll
@@ -52,12 +46,16 @@ public class SecurityConfig {
     }
 
     @Bean
+    public PasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
     public AuthenticationProvider authenticationProvider(){
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
         authenticationProvider.setUserDetailsService(userDetailsService());
-        authenticationProvider.setPasswordEncoder(passwordEncoder);
+        authenticationProvider.setPasswordEncoder(passwordEncoder());
         return authenticationProvider;
     }
 
 }
-

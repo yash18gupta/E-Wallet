@@ -42,6 +42,26 @@ public class UserApplication implements CommandLineRunner {
 //                        .build()
 //        );
 
+//        userRepository.save(
+//                User.builder()
+//                        .name("walletService")
+//                        .email("ewallet.jdbl.59@gmail.com")
+//                        .username("walletService")
+//                        .password(new BCryptPasswordEncoder().encode("wallet123"))
+//                        .authorities("service")
+//                        .build()
+//        );
+
+//        userRepository.save(
+//                User.builder()
+//                        .name("razorService")
+//                        .email("ewallet.jdbl.59@gmail.com")
+//                        .username("razor-pay")
+//                        .password(new BCryptPasswordEncoder().encode("razor123"))
+//                        .authorities("service")
+//                        .build()
+//        );
+
 
     }
 }

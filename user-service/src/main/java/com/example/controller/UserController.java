@@ -1,15 +1,20 @@
 package com.example.controller;
 
+import com.example.dto.AuthRequest;
 import com.example.dto.UserCreateRequest;
 import com.example.model.User;
 import com.example.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+
 
 @RestController
 @RequestMapping("/user")
@@ -17,7 +22,6 @@ public class UserController {
 
     @Autowired
     UserService userService;
-
 
     @PostMapping("/create")
     public void createUser(@Valid @RequestBody UserCreateRequest userCreateRequest) throws JsonProcessingException {
